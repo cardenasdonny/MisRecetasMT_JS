@@ -1,0 +1,67 @@
+﻿@model MisRecetasMT.Models.Entidades.TipoIngrediente
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tipo de Ingrediente</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item active">Editar tipo de ingrediente</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+
+        <div class="container-fluid">
+            <div class="row justify-content">
+                <div class="col-lg-11 align-self-center">
+                    <h1>Editar tipo de ingrediente</h1>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="TipoIngredienteId" />
+                                <div class="form-group">
+                                    <label asp-for="NombreTipoIngrediente" class="control-label"></label>
+                                    <input asp-for="NombreTipoIngrediente" class="form-control" />
+                                    <span asp-validation-for="NombreTipoIngrediente" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="EstadoTipoIngrediente" /> @Html.DisplayNameFor(model => model.EstadoTipoIngrediente)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <a asp-action="Index">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

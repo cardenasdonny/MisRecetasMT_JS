@@ -1,0 +1,348 @@
+﻿@model MisRecetasMT.ViewModels.Receta.RecetaViewModel
+@{
+    ViewBag.Title = "Crear Receta";
+}
+@section Styles{
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.css">
+
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Receta</h1>
+
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item active">Tipos de ingredientes</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-11 align-self-center">
+
+                    <form asp-action="Create" name="myform" id="myform" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-3">
+                                <label asp-for="Nombre">Nombre de la receta</label>
+                                <input asp-for="Nombre" id="Nombre" class="form-control" placeholder="Nombre de la receta" />
+                                <span asp-validation-for="Nombre" class="error text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label asp-for="Descripcion" class="control-label">Descripción de la receta</label>
+                                <input asp-for="Descripcion" id="Descripcion" type="text" class="form-control" placeholder="Descripción de la receta" />
+                                <span asp-validation-for="Descripcion" class="error text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Imagen" for="Imagen" class="control-label"></label>
+                            <br />
+                            <input asp-for="Imagen" type="file" id="Imagen" accept="image/*" />
+                            <span asp-validation-for="Imagen" class="error text-danger"></span>
+                        </div>                      
+
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="Estado" name="Estado" checked>
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Habilitada/Deshabilitada
+                            </label>
+                            
+                        </div>
+                    </form>
+
+                    <table class="table" id="tblItems">
+                        <thead>
+                            <tr>
+                                <th>Items</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="filaPrincipal">
+                                <td>
+                                    <select id="ingrediente" class="form-control ingrediente" asp-items="@(new SelectList(ViewBag.Ingredientes,"IngredienteId","NombreIngrediente"))"></select>
+                                    <span class="error text-danger"></span>
+                                </td>
+                                <td>
+                                    <input type="text" id="cantidad" class="form-control" placeholder="cantidad" />
+                                    <span class="error text-danger"></span>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-success" id="agregar">Agregar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Ingredientes</h4>
+
+                    <table class="table table-responsive" id="RecetaIngredientes">
+                    </table>
+
+                    <button type="button" class="btn btn-default" id="submit">Agregar a la receta</button>
+
+                    <span class="text-danger" id="recetaMensaje"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+
+        $("#agregar").click(function () {  
+
+            var isValid = true;            
+
+            if (document.getElementById("Nombre").value == '') {
+                $('#Nombre').siblings('span.error').text('Ingrese el nombre');
+                isValid = false;
+            } else {
+                $('#Nombre').siblings('span.error').text('');
+            }            
+
+            if (document.getElementById("cantidad").value == '') {
+                $('#cantidad').siblings('span.error').text('Ingrese la cantidad');
+                isValid = false;
+            } else {
+                $('#cantidad').siblings('span.error').text('');
+            }
+
+            if (document.getElementById("Descripcion").value == '') {
+                $('#Descripcion').siblings('span.error').text('Ingrese la descripcion');
+                isValid = false;
+            } else {
+                $('#Descripcion').siblings('span.error').text('');
+            }
+
+
+            if (document.getElementById("ingrediente").value == '') {
+                $('#ingrediente').siblings('span.error').text('Seleccione un ingrediente');
+                isValid = false;
+            } else {
+                $('#ingrediente').siblings('span.error').text('');
+            }           
+            
+
+            if (isValid) {
+
+                var ingrediente = document.getElementById("ingrediente").value;                
+                var $filaNueva = $("#filaPrincipal").clone().removeAttr('id');
+                $('.ingrediente', $filaNueva).val(ingrediente);
+                $('#agregar', $filaNueva).addClass('remove').html('Eliminar').removeClass('btn-success').addClass('btn-danger');
+                $('#ingrediente', '#cantidad', $filaNueva).attr('disabled', true);
+                $('#ingrediente', '#cantidad', $filaNueva).removeAttr("id");
+                $("span.error", $filaNueva).remove();
+                $("#RecetaIngredientes").append($filaNueva[0]);
+            }
+
+        });
+
+        $("#RecetaIngredientes").on("click", ".remove", function () {
+            $(this).parents("tr").remove();
+        });
+
+        $('#submit').click(function () {
+
+            /* Ejemplo
+
+            const object = {
+                Ingredientes: [
+                    { IngredienteId: 1, Cantidad:2 },
+                    { IngredienteId: 2, Cantidad: 4 },
+                    { IngredienteId: 3, Cantidad: 5 },
+                    { IngredienteId: 4, Cantidad: 7 },
+                ],
+
+            }
+
+            */
+
+            var imagen = $('#Imagen').prop("files");
+            var formData = new FormData();
+            formData.append("Nombre", document.getElementById("Nombre").value);
+            formData.append("Descripcion", document.getElementById("Descripcion").value);
+            formData.append("Imagen", imagen[0]);
+
+            if ($('#Estado').is(":checked"))              
+                formData.append("Estado", true);
+             else 
+                formData.append("Estado", false);   
+            
+            
+            var listaIngredientes = [];
+
+            $("#RecetaIngredientes tr").each(function () {
+                var item = {
+                    IngredienteId: parseInt($('select.ingrediente', this).val()),
+                    Cantidad: parseInt($('#cantidad', this).val())
+                }
+                listaIngredientes.push(item);
+
+            });    
+
+            $.ajax({
+                type: "POST",
+                url: "Recetas/Create",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (result) {
+                    console.log(result.data);
+                    if (result.data == "ok")
+                        guardarDetalle();
+                    else
+                        Swal.fire('¡Error al guardar!', '', 'info')
+                },
+                error: function (err) {
+                    Swal.fire('¡Error al guardar!', '', 'info')
+                    console.log(err.data)
+                }
+            });      
+
+        });
+
+        function guardarDetalle() {
+
+            var listaIngredientes = [];
+
+            $("#RecetaIngredientes tr").each(function () {
+                var item = {
+                    IngredienteId: parseInt($('select.ingrediente', this).val()),
+                    Cantidad: parseInt($('#cantidad', this).val())
+                }
+                listaIngredientes.push(item);
+
+            });            
+
+            const object = {
+                Ingredientes: listaIngredientes
+            }
+
+            console.log(object);
+
+            fetch("Recetas/CreateDetails", {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(object)
+            })
+                .then(resp => resp.json())
+                .then(resp => {
+                    if (resp.data == "ok") { 
+                        setTimeout(
+                            function () {
+                                location.reload();
+                            }, 3000);
+                        Swal.fire('¡Receta guardada con éxito!', '', 'success')
+                    }else {
+                        Swal.fire('¡Error al guardar!', '', 'info')
+                    }
+                })
+                .catch(err => {
+                    Swal.fire('¡Error al guardar!', '', 'info')
+                })        
+        }//fin función guardarDetalle
+        
+            
+
+            //Encargado de enviar el detalle
+            /*
+
+            fetch("Recetas/Create", {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(object)
+            })
+                .then(resp => resp.json())
+                .then(resp => {
+                })
+                .catch(err => {
+                })        
+
+        });
+
+        */
+
+
+        
+
+
+        /* OKOK
+        $('#submit').click(function () {
+
+            var imagen = $('#Imagen').prop("files");
+            var formData = new FormData();
+            formData.append("Nombre", document.getElementById("Nombre").value);
+            formData.append("Descripcion", document.getElementById("Descripcion").value);
+            formData.append("Imagen", imagen[0]);
+
+
+            var isValid = true;
+            var itemList = [];
+            $("#RecetaIngredientes tr").each(function () {
+                var item = {
+                    IngredienteId: parseInt($('select.ingrediente', this).val()),
+                    Cantidad: parseInt($('#cantidad', this).val())
+                }
+                itemList.push(item);
+
+            });
+            var Ingredientes = JSON.stringify({ 'Ingredientes': itemList });
+            console.log(Ingredientes);
+            formData.append("Ingredientes", JSON.stringify(Ingredientes));
+
+            $.ajax({
+                type: "POST",
+                url: "Recetas/Create",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (result) {
+                    console.log("OK")
+                },
+                error: function (err) {
+                    //showNotify("There was an error importing. " + err.statusText + " (" + err.status + ")", "warning", "fa fa-exclamation-triangle");
+                    console.log("Error")
+                }
+            });
+
+        
+        */
+        
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

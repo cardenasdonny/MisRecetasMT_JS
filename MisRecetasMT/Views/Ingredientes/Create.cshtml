@@ -1,0 +1,104 @@
+﻿@model MisRecetasMT.Models.Entidades.Ingrediente
+
+@{
+    ViewData["Title"] = "Crear";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Ingrediente</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item active">Crear ingrediente</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-11 align-self-center">
+                    <h1>Crear ingrediente</h1>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Create" name="formulario" id="formulario" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="TipoIngredienteId" class="control-label"></label>
+                                    <select asp-for="TipoIngredienteId" class="form-control" asp-items="ViewBag.TipoIngredienteId"></select>
+                                    <span asp-validation-for="TipoIngredienteId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="NombreIngrediente" class="control-label"></label>
+                                    <input asp-for="NombreIngrediente" class="form-control" />
+                                    <span asp-validation-for="NombreIngrediente" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Imagen" class="control-label"></label>
+                                    <br />
+                                    <input asp-for="Imagen" accept="image/*" />
+                                    <span asp-validation-for="Imagen" class="text-danger"></span>
+                                </div>                              
+
+
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" checked asp-for="EstadoIngrediente" /> @Html.DisplayNameFor(model => model.EstadoIngrediente)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="button" value="Crear" class="btn btn-primary" onclick="guardarIngrediente()" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <a asp-action="Index">Volver</a>
+                    </div>
+                </div>
+                <!-- /.col-md-6 -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@section Scripts {
+    <script>
+        function guardarIngrediente() {
+
+            Swal.fire({
+                title: "Guardar ingrediente",
+                text: "¿Estás seguro que desea guardar el ingrediente?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                denyButtonText: 'No guardar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formulario').submit();
+
+                } else if (result.isDenied) {
+                    Swal.fire('¡Ingrediente no guardado!', '', 'info')
+                }
+            })
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

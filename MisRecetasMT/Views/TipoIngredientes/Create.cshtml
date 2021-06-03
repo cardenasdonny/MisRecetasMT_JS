@@ -1,0 +1,98 @@
+﻿@model MisRecetasMT.Models.Entidades.TipoIngrediente
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@section Styles{
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.css">
+
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tipo de Ingrediente</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item active">Crear tipo de ingrediente</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-11 align-self-center">
+                    <h1>Crear tipo de ingrediente</h1>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Create" name="formulario" id="formulario">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="NombreTipoIngrediente" class="control-label"></label>
+                                    <input asp-for="NombreTipoIngrediente" class="form-control" />
+                                    <span asp-validation-for="NombreTipoIngrediente" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" checked asp-for="EstadoTipoIngrediente" /> @Html.DisplayNameFor(model => model.EstadoTipoIngrediente)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="button" value="Crear" class="btn btn-primary" onclick="guardarTipoIngrediente()" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <a asp-action="Index">Volver</a>
+                    </div>
+                </div>
+                <!-- /.col-md-6 -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+@section Scripts {
+    <script>
+        function guardarTipoIngrediente() {           
+
+            Swal.fire({
+                title: "Guardar tipo de ingrediente",
+                text: "¿Estás seguro que desea guardar el tipo de ingrediente?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                denyButtonText: 'No guardar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formulario').submit();
+                    
+                } else if (result.isDenied) {
+                    Swal.fire('¡Tipo de ingrediente no guardado!', '', 'info')
+                }
+            })
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

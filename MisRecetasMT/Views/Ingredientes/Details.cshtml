@@ -1,0 +1,65 @@
+﻿@model MisRecetasMT.Models.Entidades.Ingrediente
+
+@{
+    ViewData["Title"] = "Detalle";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Ingrediente</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item active">Detalle ingrediente</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+
+        <div class="container-fluid">
+            <div class="row justify-content">
+                <div class="col-lg-11 align-self-center">
+                    <h1>Detalle ingrediente</h1>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.NombreIngrediente)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.NombreIngrediente)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.EstadoIngrediente)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.EstadoIngrediente)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.TipoIngrediente)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.TipoIngrediente.NombreTipoIngrediente)
+                        </dd>
+                        <dd class="col-sm-10">
+                            <img src="@("~/image/" + Model.NombreImagen)" asp-append-version="true" width="250" height="250" />
+                        </dd>
+                    </dl>
+                </div>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.IngredienteId">Edit</a> |
+                    <a asp-action="Volver"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
