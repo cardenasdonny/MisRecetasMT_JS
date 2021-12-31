@@ -13,7 +13,7 @@ using MisRecetasMT.Models.Entidades;
 
 namespace MisRecetasMT.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class IngredientesController : Controller
     {
         private readonly Contexto _context;
@@ -53,7 +53,7 @@ namespace MisRecetasMT.Controllers
         // GET: Ingredientes/Create
         public IActionResult Create()
         {            
-            ViewData["TipoIngredienteId"] = new SelectList(_context.TipoIngrediente.ToList(), "TipoIngredienteId", "NombreTipoIngrediente");
+            ViewData["TipoIngredienteId"] = new SelectList(_context.TipoIngrediente.Where(x=>x.EstadoTipoIngrediente==true).ToList(), "TipoIngredienteId", "NombreTipoIngrediente");
             return View();
         }
 
@@ -86,7 +86,7 @@ namespace MisRecetasMT.Controllers
                 TempData["Mensaje"] = "El ingrediente se creó con éxito";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TipoIngredienteId"] = new SelectList(_context.TipoIngrediente, "TipoIngredienteId", "NombreTipoIngrediente", ingrediente.TipoIngredienteId);
+            ViewData["TipoIngredienteId"] = new SelectList(_context.TipoIngrediente.Where(x => x.EstadoTipoIngrediente == true).ToList(), "TipoIngredienteId", "NombreTipoIngrediente", ingrediente.TipoIngredienteId);
             return View(ingrediente);
         }
 
@@ -170,12 +170,35 @@ namespace MisRecetasMT.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ingrediente = await _context.Ingredientes.FindAsync(id);
-            _context.Ingredientes.Remove(ingrediente);
-            await _context.SaveChangesAsync();
-            TempData["Accion"] = "Eliminar";
-            TempData["Mensaje"] = "El ingrediente se eliminó con éxito";
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var Ingrediente = await _context.Ingredientes.FindAsync(id);
+
+                if (Ingrediente.EstadoIngrediente == true)
+                {
+                    Ingrediente.EstadoIngrediente = false;
+
+                }
+                else
+                {
+                    Ingrediente.EstadoIngrediente = true;
+                }
+
+                _context.Update(Ingrediente);
+                await _context.SaveChangesAsync();
+                TempData["Accion"] = "Editar";
+                TempData["Mensaje"] = "Se cambió el estado con éxito";
+                return RedirectToAction(nameof(Index));
+
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+
+                throw;
+
+            }
         }
 
         private bool IngredienteExists(int id)

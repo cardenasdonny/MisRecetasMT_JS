@@ -32,5 +32,7 @@ namespace MisRecetasMT.ViewModels.Usuario
         public long Cedula { get; set; }
         public int Rol { get; set; }
 
+        public string Registro { get; set; }
+
     }
 }

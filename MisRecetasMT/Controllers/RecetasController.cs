@@ -16,7 +16,7 @@ using MisRecetasMT.ViewModels.Receta;
 
 namespace MisRecetasMT.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class RecetasController : Controller
     {
         private readonly Contexto _context;

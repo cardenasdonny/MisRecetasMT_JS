@@ -38,7 +38,7 @@ namespace MisRecetasMT.Controllers
             _singInManager = signInManager;  
             
         }
-        [Authorize]
+        //[Authorize]
 
         //Principal Usuarios
         public async Task<IActionResult> Index()
@@ -49,16 +49,25 @@ namespace MisRecetasMT.Controllers
         
 
         //Crear Usuarios
-        [Authorize]
+        //[Authorize]
         public IActionResult Crear()
         {
             return View();
         }
 
+        public IActionResult CrearUsuario()
+        {
+            UsuarioModel usuarioModel = new UsuarioModel()
+            {
+                Registro = "2"
+            };
+            return View(usuarioModel);
+        }
 
-        [Authorize]
+
+        //[Authorize]
         [HttpPost]       
-        public async Task<IActionResult> Crear([Bind("Cedula,Nombre,Email,Password")] UsuarioModel usuarioModel)
+        public async Task<IActionResult> Crear([Bind("Cedula,Nombre,Email,Password,Registro")] UsuarioModel usuarioModel)
         {
 
             if (ModelState.IsValid)
@@ -77,7 +86,10 @@ namespace MisRecetasMT.Controllers
                     TempData["Accion"] = "Crear";
                     TempData["Mensaje"] = "El usuario se creó con éxito";
                     var result = await _userManager.CreateAsync(usuario, usuarioModel.Password).ConfigureAwait(false);
-                    return RedirectToAction(nameof(Index));
+                    if(usuarioModel.Registro!="1")
+                        return RedirectToAction(nameof(Index));
+                    else
+                        return RedirectToAction(nameof(Login));
 
                 }
                 catch (Exception)
@@ -89,7 +101,7 @@ namespace MisRecetasMT.Controllers
             }
             return View(usuarioModel);
         }
-        [Authorize]
+        //[Authorize]
         // Eliminar Usuarios
         [HttpPost, ActionName("Eliminar")]
         //[ValidateAntiForgeryToken]
@@ -116,7 +128,7 @@ namespace MisRecetasMT.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login([Bind("Email,Password,RecordarMe")] LoginModel model)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +151,7 @@ namespace MisRecetasMT.Controllers
 
             return View(model);
         }
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CerrarSesion()
         {
             await _singInManager.SignOutAsync();

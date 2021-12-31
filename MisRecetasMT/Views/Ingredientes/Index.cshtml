@@ -77,11 +77,25 @@
                                         <button type="submit" class="btn btn-success">Editar</button>
                                     </form>
                                 </td>
-                                <td>
-                                    <form asp-action="delete" asp-route-id="@item.IngredienteId" method="post">
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de eliminar el ingrediente?')">Eliminar</button>
-                                    </form>
-                                </td>
+                                @if (item.EstadoIngrediente != true)
+                                {
+
+                                    <td>
+                                        <form asp-action="delete" asp-route-id="@item.IngredienteId" method="post">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de cambiar el estado?')">Habilitar</button>
+                                        </form>
+                                    </td>
+                                }
+                                else
+                                {
+
+                                    <td>
+                                        <form asp-action="delete" asp-route-id="@item.IngredienteId" method="post">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de cambiar el estado?')">Deshabilitar</button>
+                                        </form>
+                                    </td>
+
+                                }
                             </tr>
                             }
                         </tbody>

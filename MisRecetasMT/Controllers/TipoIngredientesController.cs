@@ -20,12 +20,12 @@ namespace MisRecetasMT.Controllers
         {
             _context = context;
         }
-        [Authorize]
+        //[Authorize]
 
         // GET: TipoIngredientes
         public async Task<IActionResult> Index()
         {
-            var tipoIngrediente = await _context.TipoIngrediente.Where(x=>x.EstadoTipoIngrediente==true).ToListAsync();
+            var tipoIngrediente = await _context.TipoIngrediente.ToListAsync();
             return View(tipoIngrediente);
             //return View(await _context.TipoIngrediente.ToListAsync());
         }
@@ -134,13 +134,44 @@ namespace MisRecetasMT.Controllers
         //[ValidateAntiForgeryToken]        
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            /*
             var tipoIngrediente = await _context.TipoIngrediente.FindAsync(id);
             _context.TipoIngrediente.Remove(tipoIngrediente);
             await _context.SaveChangesAsync();
             TempData["Accion"] = "Eliminar";
             TempData["Mensaje"] = "El tipo de ingrediente se eliminó con éxito";
             return RedirectToAction(nameof(Index));
+            */
 
+            try
+            {
+                var tipoIngrediente = await _context.TipoIngrediente.FindAsync(id);
+
+                if (tipoIngrediente.EstadoTipoIngrediente == true)
+                {
+                    tipoIngrediente.EstadoTipoIngrediente = false;
+
+                }
+                else
+                {
+                    tipoIngrediente.EstadoTipoIngrediente = true;
+                }
+
+                _context.Update(tipoIngrediente);
+                await _context.SaveChangesAsync();
+                TempData["Accion"] = "Editar";
+                TempData["Mensaje"] = "Se cambió el estado con éxito";
+                return RedirectToAction(nameof(Index));
+
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+               
+                
+                throw;
+                
+            }
         }
 
         private bool TipoIngredienteExists(int id)

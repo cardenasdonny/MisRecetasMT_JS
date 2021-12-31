@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MisRecetasMT.Migrations
 {
-    public partial class n1 : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -241,6 +241,34 @@ namespace MisRecetasMT.Migrations
                         principalTable: "Recetas",
                         principalColumn: "RecetaId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "Cedula", "Nombre", "Rol" },
+                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "2967512e-f52b-4318-933d-b967dfb08bd3", "UsuarioIdentity", "mariaisabel200.trivio@gmail.com", true, false, null, "MARIAISABEL200.TRIVIO@GMAIL.COM", "MARIAISABEL200.TRIVIO@GMAIL.COM", "AQAAAAEAACcQAAAAEN0DP1i1hcs3hyPvZS36FXanUTGsVVPjuZNOyVvRt+7HUHjeYZpb5/ttFSO6kFmVaA==", null, false, "94341a82-dff7-44cf-bb05-b15249607a9a", false, "mariaisabel200.trivio@gmail.com", 1234567890L, "Admin", 1 });
+
+            migrationBuilder.InsertData(
+                table: "TipoIngrediente",
+                columns: new[] { "TipoIngredienteId", "EstadoTipoIngrediente", "NombreTipoIngrediente" },
+                values: new object[,]
+                {
+                    { 1, true, "Verduras" },
+                    { 2, true, "Carnes frías" },
+                    { 3, true, "Lácteos" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Ingredientes",
+                columns: new[] { "IngredienteId", "EstadoIngrediente", "NombreImagen", "NombreIngrediente", "TipoIngredienteId" },
+                values: new object[,]
+                {
+                    { 1, true, null, "Cebolla", 1 },
+                    { 2, true, null, "Papa", 1 },
+                    { 3, true, null, "Salchicha", 2 },
+                    { 6, true, null, "Salchichón", 2 },
+                    { 4, true, null, "Queso", 3 },
+                    { 5, true, null, "Leche", 3 }
                 });
 
             migrationBuilder.CreateIndex(

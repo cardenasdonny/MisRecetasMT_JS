@@ -10,8 +10,8 @@ using MisRecetasMT.Models.AccesoDB;
 namespace MisRecetasMT.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20210315223548_n1")]
-    partial class n1
+    [Migration("20210603192635_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -253,6 +253,50 @@ namespace MisRecetasMT.Migrations
                     b.HasIndex("TipoIngredienteId");
 
                     b.ToTable("Ingredientes");
+
+                    b.HasData(
+                        new
+                        {
+                            IngredienteId = 1,
+                            EstadoIngrediente = true,
+                            NombreIngrediente = "Cebolla",
+                            TipoIngredienteId = 1
+                        },
+                        new
+                        {
+                            IngredienteId = 2,
+                            EstadoIngrediente = true,
+                            NombreIngrediente = "Papa",
+                            TipoIngredienteId = 1
+                        },
+                        new
+                        {
+                            IngredienteId = 3,
+                            EstadoIngrediente = true,
+                            NombreIngrediente = "Salchicha",
+                            TipoIngredienteId = 2
+                        },
+                        new
+                        {
+                            IngredienteId = 4,
+                            EstadoIngrediente = true,
+                            NombreIngrediente = "Queso",
+                            TipoIngredienteId = 3
+                        },
+                        new
+                        {
+                            IngredienteId = 5,
+                            EstadoIngrediente = true,
+                            NombreIngrediente = "Leche",
+                            TipoIngredienteId = 3
+                        },
+                        new
+                        {
+                            IngredienteId = 6,
+                            EstadoIngrediente = true,
+                            NombreIngrediente = "Salchichón",
+                            TipoIngredienteId = 2
+                        });
                 });
 
             modelBuilder.Entity("MisRecetasMT.Models.Entidades.Receta", b =>
@@ -330,6 +374,26 @@ namespace MisRecetasMT.Migrations
                     b.HasKey("TipoIngredienteId");
 
                     b.ToTable("TipoIngrediente");
+
+                    b.HasData(
+                        new
+                        {
+                            TipoIngredienteId = 1,
+                            EstadoTipoIngrediente = true,
+                            NombreTipoIngrediente = "Verduras"
+                        },
+                        new
+                        {
+                            TipoIngredienteId = 2,
+                            EstadoTipoIngrediente = true,
+                            NombreTipoIngrediente = "Carnes frías"
+                        },
+                        new
+                        {
+                            TipoIngredienteId = 3,
+                            EstadoTipoIngrediente = true,
+                            NombreTipoIngrediente = "Lácteos"
+                        });
                 });
 
             modelBuilder.Entity("MisRecetasMT.Models.Usuario.UsuarioIdentity", b =>
@@ -348,6 +412,27 @@ namespace MisRecetasMT.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("UsuarioIdentity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2967512e-f52b-4318-933d-b967dfb08bd3",
+                            Email = "mariaisabel200.trivio@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MARIAISABEL200.TRIVIO@GMAIL.COM",
+                            NormalizedUserName = "MARIAISABEL200.TRIVIO@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN0DP1i1hcs3hyPvZS36FXanUTGsVVPjuZNOyVvRt+7HUHjeYZpb5/ttFSO6kFmVaA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "94341a82-dff7-44cf-bb05-b15249607a9a",
+                            TwoFactorEnabled = false,
+                            UserName = "mariaisabel200.trivio@gmail.com",
+                            Cedula = 1234567890L,
+                            Nombre = "Admin",
+                            Rol = 1
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
